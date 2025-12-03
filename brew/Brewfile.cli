@@ -1,0 +1,40 @@
+
+# Core system tools (newer than macOS built-ins)
+brew "git"
+brew "openssh"
+brew "rsync"
+brew "make"
+brew "autoconf"
+brew "automake"
+brew "pkg-config"
+brew "cmake"
+
+# Languages / runtimes
+brew "python"
+brew "uv"
+brew "ruby"
+
+# CLI utilities (no conflict with system)
+brew "trash"
+brew "just"
+brew "ssh-copy-id"
+brew "lrzsz"
+
+# Shell / prompt / dotfiles
+brew "starship"
+brew "chezmoi"
+brew "zinit"
+
+# Modern CLI tools
+brew "zoxide"
+brew "fzf"
+brew "ripgrep"
+brew "fd"
+brew "bat"
+brew "sd"
+brew "eza"
+brew "git-delta"
+brew "topgrade"
+
+# MAS 命令行
+brew "mas"

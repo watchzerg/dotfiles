@@ -1,0 +1,10 @@
+
+# Terminal & 字体
+cask "wezterm"
+cask "font-jetbrains-mono-nerd-font"
+
+# 开发 / 工具
+cask "visual-studio-code"
+cask "stats"          # exelban/stats，菜单栏系统监控
+cask "cursor"
+cask "1password-cli"

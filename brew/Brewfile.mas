@@ -1,0 +1,3 @@
+# Mac App Store apps（通过 `mas` 安装）
+mas "Telegram", id: 747648890
+mas "WhatsApp", id: 310633997

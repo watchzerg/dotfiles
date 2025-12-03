@@ -1,0 +1,21 @@
+########################################
+# 0. Homebrew & 基础 PATH
+########################################
+eval "$(/opt/homebrew/bin/brew shellenv)"
+typeset -U path fpath
+path+=("$HOME/.local/bin")
+
+# 非交互 Shell 直接返回（只要 PATH / brew 环境）
+[[ $- == *i* ]] || return
+
+########################################
+# 加载分段配置
+########################################
+# 补全 & 插件 (Zinit)
+source "$HOME/.config/zsh/10-completion-and-plugins.zsh"
+
+# Prompt & 历史 / Shell 行为
+source "$HOME/.config/zsh/20-prompt-and-history.zsh"
+
+# fzf & CLI 工具 / alias
+source "$HOME/.config/zsh/30-fzf-and-aliases.zsh"

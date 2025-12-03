@@ -1,0 +1,76 @@
+# ===========================
+# OS / System files
+# ===========================
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+
+# Windows
+ehthumbs.db
+Desktop.ini
+
+# ===========================
+# Editor / IDE
+# ===========================
+# VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# JetBrains 系列
+.idea/
+*.iml
+
+# Cursor
+.cursor/
+
+# ===========================
+# Python
+# ===========================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pdb
+*.coverage
+*.egg-info/
+dist/
+build/
+
+# UV / virtualenv
+.venv/
+.uv/
+.venv.bak/
+
+# ===========================
+# Node / JS
+# ===========================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ===========================
+# macOS / system tools
+# ===========================
+.SyncServices/
+.Trashes
+.fseventsd
+
+# ===========================
+# Logs
+# ===========================
+*.log
+*.trace
+*.out
+
+# ===========================
+# Misc
+# ===========================
+*.swp
+*.swo
+*.tmp
+
