@@ -1,21 +1,124 @@
 ########################################
 # 0. Homebrew & 基础 PATH
 ########################################
-eval "$(/opt/homebrew/bin/brew shellenv)"
+if [[ -x /opt/homebrew/bin/brew ]]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
 typeset -U path fpath
-path+=("$HOME/.local/bin")
+path=("$HOME/.local/bin" $path)
+
+# 默认编辑器
+if command -v zed >/dev/null 2>&1; then
+  export EDITOR="zed --wait"
+else
+  export EDITOR="vim"
+fi
 
 # 非交互 Shell 直接返回（只要 PATH / brew 环境）
 [[ $- == *i* ]] || return
 
 ########################################
-# 加载分段配置
+# 1. 补全系统 (completion)
 ########################################
-# 补全 & 插件 (Zinit)
-source "$HOME/.config/zsh/10-completion-and-plugins.zsh"
+# Homebrew 提供的补全路径，必须在 compinit 前加入 fpath
+fpath=("$HOMEBREW_PREFIX/share/zsh/site-functions" $fpath)
 
-# Prompt & 历史 / Shell 行为
-source "$HOME/.config/zsh/20-prompt-and-history.zsh"
+# 补全行为配置（在 compinit 前）
+zstyle ':completion:*' menu select
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 
-# fzf & CLI 工具 / alias
-source "$HOME/.config/zsh/30-fzf-and-aliases.zsh"
+########################################
+# 2. Zinit & 插件
+########################################
+# 用 brew 安装的 Zinit
+if [[ -r "$HOMEBREW_PREFIX/opt/zinit/zinit.zsh" ]]; then
+  source "$HOMEBREW_PREFIX/opt/zinit/zinit.zsh"
+
+  # 补全插件：必须在 compinit 前加载，且不要 wait
+  zinit ice lucid
+  zinit light zsh-users/zsh-completions
+fi
+
+# 在compinit之前执行completion.zsh
+[[ -r "$HOMEBREW_PREFIX/opt/fzf/shell/completion.zsh" ]] && source "$HOMEBREW_PREFIX/opt/fzf/shell/completion.zsh"
+
+# 初始化补全（偶尔没生效的话需要手工 rm ~/.zcompdump* 和 exec zsh）
+autoload -Uz compinit
+compinit -C
+
+# zinit 存在时才加载插件
+if command -v zinit >/dev/null 2>&1; then
+  zinit ice wait lucid
+  zinit light Aloxaf/fzf-tab
+
+  zinit ice wait lucid
+  zinit light zsh-users/zsh-autosuggestions
+
+  zinit ice wait lucid atload"zle reset-prompt"
+  zinit light zsh-users/zsh-syntax-highlighting
+fi
+
+# ===== NVM（懒加载）=====
+export NVM_DIR="$HOME/.nvm"
+
+load_nvm() {
+  local nvm_sh="$HOMEBREW_PREFIX/opt/nvm/nvm.sh"
+
+  if [[ -s "$nvm_sh" ]]; then
+    unset -f nvm node npm npx load_nvm
+    source "$nvm_sh"
+  else
+    echo "nvm.sh not found: $nvm_sh" >&2
+    return 127
+  fi
+}
+
+nvm()  { load_nvm && nvm "$@"; }
+node() { load_nvm && node "$@"; }
+npm()  { load_nvm && npm "$@"; }
+npx()  { load_nvm && npx "$@"; }
+corepack() { load_nvm && corepack "$@"; }
+########################################
+# 3. Prompt: Starship
+########################################
+if command -v starship >/dev/null 2>&1; then
+  eval "$(starship init zsh)"
+fi
+
+########################################
+# 4. Shell 行为 & 历史记录
+########################################
+HISTFILE="$HOME/.zsh_history"
+HISTSIZE=50000
+SAVEHIST=50000
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_IGNORE_SPACE
+setopt HIST_REDUCE_BLANKS
+setopt INC_APPEND_HISTORY
+setopt pipefail
+
+# less 默认行为（允许颜色）
+export LESS='-R'
+
+########################################
+# 5. fzf 默认快捷键（Ctrl-R / Ctrl-T 等）
+########################################
+[[ -r "$HOMEBREW_PREFIX/opt/fzf/shell/key-bindings.zsh" ]] && source "$HOMEBREW_PREFIX/opt/fzf/shell/key-bindings.zsh"
+
+########################################
+# 6. CLI 工具 & alias
+########################################
+# zoxide
+if command -v zoxide >/dev/null 2>&1; then
+  eval "$(zoxide init zsh)"
+fi
+
+# eza / bat 等别名
+if command -v eza >/dev/null 2>&1; then
+  alias ls='eza --icons --group-directories-first'
+  alias ll='eza -l --icons --group-directories-first'
+  alias la='eza -la --icons --group-directories-first'
+else
+  alias ll='ls -lh'
+  alias la='ls -lha'
+fi
