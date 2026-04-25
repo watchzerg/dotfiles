@@ -1,3 +1,8 @@
 # Mac App Store apps（通过 `mas` 安装）
 mas "Telegram", id: 747648890
 mas "WhatsApp", id: 310633997
+mas "Tailscale", id: 1475387142
+mas "WeChat", id: 836500024
+mas "Windows App", id: 1295203466
+mas "DaVinci Resolve", id: 571213070
+# mas "Xcode", id: 497799835 # 需要时再装

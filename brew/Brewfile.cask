@@ -1,10 +1,17 @@
 
 # Terminal & 字体
-cask "wezterm"
 cask "font-jetbrains-mono-nerd-font"
 
+cask "linearmouse"
+cask "iina"
+cask "rectangle" # https://rectangleapp.com/
+cask "keka" # 可以去 AppStore 购买，以支持作者
+
 # 开发 / 工具
-cask "visual-studio-code"
 cask "stats"          # exelban/stats，菜单栏系统监控
-cask "cursor"
 cask "1password-cli"
+cask "claude-code" # https://code.claude.com/docs/en/overview#homebrew
+cask "codex" # https://github.com/openai/codex
+cask "zed" # https://zed.dev/docs/installation
+
+# cask "ghostty" # 不在这里安装，而是前置到最开始brew刚安装完试后就安装ghostty

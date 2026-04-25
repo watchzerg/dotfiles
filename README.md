@@ -3,13 +3,16 @@
 通过 Homebrew + chezmoi + dotfiles 一键完成新 Mac 的开发环境初始化。
 
 ## 1. 安装 Xcode Command Line Tools 和 Homebrew
+
 ```bash
 xcode-select --install
+
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 echo >> "$HOME/.zprofile"
 echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> "$HOME/.zprofile"
 eval "$(/opt/homebrew/bin/brew shellenv)"
-brew update
+
+brew install --cask ghostty # 然后就可以从Terminal改为使用Ghostty了
 ```
 
 ## 2. 安装和应用chezmoi
@@ -19,26 +22,54 @@ brew install chezmoi
 chezmoi init -apply https://github.com/watchzerg/dotfiles.git # 公开仓库，不要提交api-key等
 ```
 
-## 3. 用brew安装其它软件
+## 3. 用brew安装其它软件（这里不希望走chezmoi的run_once，还是手工执行可靠些）
+
 ```bash
 chezmoi cd
+
+# 第1步，命令行工具与cask
 make doctor
+brew bundle check --file=brew/Brewfile.cli --verbose
 make brew-cli
+brew bundle check --file=brew/Brewfile.cask --verbose
 make brew-cask
-# 需要先登录 Mac App Store
+
+# 第2步：Mac App Store 应用（需要先登录）
 make doctor-mas
+brew bundle check --file=brew/Brewfile.mas --verbose
 make brew-mas
+
+# 第3步，第三方厂商脚本（例如Claude Code）
+make doctor-init
+make fix-init-permission # 脚本加执行权限，仅首次
+make init-script
 ```
 
 # 维护
 
 ## 1. 更新Brewfile（例如安装了新软件）
+
 ```bash
 chezmoi cd
-$EDITOR brew/Brewfile.cli # 或者 Brewfile.cask Brewfile.mas
-git diff
-git status
+
+# 当前系统中安装的formula，哪些不在Brewfile.cli里
+comm -23 <(brew leaves | sort) <(brew bundle list --file=./brew/Brewfile.cli --formula | sort)
+$EDITOR brew/Brewfile.cli
 make brew-cli
+
+# 当前系统中安装的cask，哪些不在Brewfile.cask里
+comm -23 <(brew list --cask | sort) <(brew bundle list --file=./brew/Brewfile.cask --cask | sort)
+$EDITOR brew/Brewfile.cask
+make brew-cask
+
+# 当前系统中安装的cask，哪些不在Brewfile.mas里
+mas list | awk '{print $1 "\t" $0}' | sort > /tmp/mas-installed.tsv; \
+comm -23 \
+  <(cut -f1 /tmp/mas-installed.tsv) \
+  <(ruby -e 'def mas(name,id:,**opts); puts id; end; eval(File.read(ARGV[0]))' ./brew/Brewfile.mas | sort) \
+| while read id; do awk -F'\t' -v id="$id" '$1 == id {print $2}' /tmp/mas-installed.tsv; done
+$EDITOR brew/Brewfile.mas
+make brew-mas
 ```
 
 ## 2. 更新chezmoi里的配置

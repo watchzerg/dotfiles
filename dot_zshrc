@@ -9,7 +9,7 @@ path=("$HOME/.local/bin" $path)
 
 # 默认编辑器
 if command -v zed >/dev/null 2>&1; then
-  export EDITOR="zed --wait"
+  export EDITOR="zed"
 else
   export EDITOR="vim"
 fi

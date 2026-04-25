@@ -10,15 +10,17 @@ brew "pkg-config"
 brew "cmake"
 
 # Languages / runtimes
-brew "python"
-brew "uv"
-brew "ruby"
+brew "python" # 全局版本，为一些脚本兜底
+brew "uv" # 开发python项目时，管理python版本
+brew "nvm"
+# brew "ruby" # 明确需要时再安装
 
 # CLI utilities (no conflict with system)
 brew "trash"
 brew "just"
 brew "ssh-copy-id"
 brew "lrzsz"
+brew "sevenzip"
 
 # Shell / prompt / dotfiles
 brew "starship"
