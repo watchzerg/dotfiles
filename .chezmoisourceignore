@@ -1,0 +1,5 @@
+brew/
+scripts/
+.DS_Store
+Makefile
+README.md
