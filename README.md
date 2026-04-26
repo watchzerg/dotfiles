@@ -26,20 +26,22 @@ chezmoi init --apply git@github.com:watchzerg/dotfiles.git
 ```bash
 chezmoi cd
 
-# 第1步，命令行工具与cask
+# 第1步，安装formulas（对应配置已经在.zshrc里了）
 make doctor
 brew bundle check --file=brew/Brewfile.cli --verbose
 make brew-cli
 exec zsh -l # 刷新shell，启用新安装的各种工具
+
+# 第2步，安装casks（之后依次配置，例如开机启动、禁止自动更新）
 brew bundle check --file=brew/Brewfile.cask --verbose
 make brew-cask
 
-# 第2步：Mac App Store 应用（需要先登录）
+# 第3步：（需要先登录）安装 AppStore 应用（之后依次配置，例如开机启动、禁止自动更新）
 make doctor-mas
 brew bundle check --file=brew/Brewfile.mas --verbose
 make brew-mas
 
-# 第3步，第三方厂商脚本（例如Claude Code）
+# 第4步，执行初始化脚本（例如用nvm安装默认的node）
 make doctor-init
 make fix-init-permission # 脚本加执行权限，通常不需要
 make init-script
