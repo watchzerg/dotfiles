@@ -7,19 +7,18 @@
 ```bash
 xcode-select --install
 
+# 安装homebrew（https://brew.sh/），并按提示执行后续的几行配置命令
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-echo >> "$HOME/.zprofile"
-echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> "$HOME/.zprofile"
-eval "$(/opt/homebrew/bin/brew shellenv)"
 
-brew install --cask ghostty # 然后就可以从Terminal改为使用Ghostty了
+# 安装Ghostty，后续不就再需要Terminal了
+brew install --cask ghostty
 ```
 
 ## 2. 安装和应用chezmoi
 
 ```bash
 brew install chezmoi
-chezmoi init -apply https://github.com/watchzerg/dotfiles.git # 公开仓库，不要提交api-key等
+chezmoi init -apply git@github.com:watchzerg/dotfiles.git
 ```
 
 ## 3. 用brew安装其它软件（这里不希望走chezmoi的run_once，还是手工执行可靠些）
@@ -87,6 +86,5 @@ chezmoi cd
 git diff --cached
 git add .
 git commit -m "Update configuration"
-git remote set-url origin git@github.com:watchzerg/dotfiles.git # 从http转为git方便使用sshkey
 git push
 ```
