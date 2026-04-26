@@ -18,7 +18,7 @@ brew install --cask ghostty
 
 ```bash
 brew install chezmoi
-chezmoi init -apply git@github.com:watchzerg/dotfiles.git
+chezmoi init --apply git@github.com:watchzerg/dotfiles.git
 ```
 
 ## 3. 用brew安装其它软件（这里不希望走chezmoi的run_once，还是手工执行可靠些）
@@ -30,6 +30,7 @@ chezmoi cd
 make doctor
 brew bundle check --file=brew/Brewfile.cli --verbose
 make brew-cli
+exec zsh -l # 刷新shell，启用新安装的各种工具
 brew bundle check --file=brew/Brewfile.cask --verbose
 make brew-cask
 
@@ -40,7 +41,7 @@ make brew-mas
 
 # 第3步，第三方厂商脚本（例如Claude Code）
 make doctor-init
-make fix-init-permission # 脚本加执行权限，仅首次
+make fix-init-permission # 脚本加执行权限，通常不需要
 make init-script
 ```
 
