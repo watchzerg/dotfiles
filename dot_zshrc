@@ -14,6 +14,8 @@ else
   export EDITOR="vim"
 fi
 
+eval "$(mise activate zsh --shims)"
+
 # 非交互 Shell 直接返回（只要 PATH / brew 环境）
 [[ $- == *i* ]] || return
 
@@ -58,26 +60,9 @@ if command -v zinit >/dev/null 2>&1; then
   zinit light zsh-users/zsh-syntax-highlighting
 fi
 
-# ===== NVM（懒加载）=====
-export NVM_DIR="$HOME/.nvm"
+# ===== mise =====
+eval "$(mise activate zsh)"
 
-load_nvm() {
-  local nvm_sh="$HOMEBREW_PREFIX/opt/nvm/nvm.sh"
-
-  if [[ -s "$nvm_sh" ]]; then
-    unset -f nvm node npm npx load_nvm
-    source "$nvm_sh"
-  else
-    echo "nvm.sh not found: $nvm_sh" >&2
-    return 127
-  fi
-}
-
-nvm()  { load_nvm && nvm "$@"; }
-node() { load_nvm && node "$@"; }
-npm()  { load_nvm && npm "$@"; }
-npx()  { load_nvm && npx "$@"; }
-corepack() { load_nvm && corepack "$@"; }
 ########################################
 # 3. Prompt: Starship
 ########################################
