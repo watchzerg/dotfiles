@@ -12,5 +12,4 @@ cask "keka" # 可以去 AppStore 购买，以支持作者
 cask "stats"          # exelban/stats，菜单栏系统监控
 cask "1password-cli"
 cask "claude-code" # https://code.claude.com/docs/en/overview#homebrew
-cask "codex" # https://github.com/openai/codex
 cask "zed" # https://zed.dev/docs/installation
