@@ -5,7 +5,12 @@ if [[ -x /opt/homebrew/bin/brew ]]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 typeset -U path fpath
-path=("$HOME/.local/bin" $path)
+path=(
+  "$HOME/.local/bin"
+  "$HOME/.grok/bin"
+  "$HOME/.bun/bin"
+  $path
+)
 
 # 默认编辑器
 if command -v zed >/dev/null 2>&1; then
@@ -16,6 +21,8 @@ fi
 
 eval "$(mise activate zsh --shims)"
 
+ulimit -n 65536
+
 # 非交互 Shell 直接返回（只要 PATH / brew 环境）
 [[ $- == *i* ]] || return
 
@@ -23,7 +30,11 @@ eval "$(mise activate zsh --shims)"
 # 1. 补全系统 (completion)
 ########################################
 # Homebrew 提供的补全路径，必须在 compinit 前加入 fpath
-fpath=("$HOMEBREW_PREFIX/share/zsh/site-functions" $fpath)
+fpath=(
+  "$HOME/.grok/completions/zsh"
+  "$HOMEBREW_PREFIX/share/zsh/site-functions"
+  $fpath
+)
 
 # 补全行为配置（在 compinit 前）
 zstyle ':completion:*' menu select
@@ -47,6 +58,11 @@ fi
 # 初始化补全（偶尔没生效的话需要手工 rm ~/.zcompdump* 和 exec zsh）
 autoload -Uz compinit
 compinit -C
+
+# Oh My Pi 补全
+if command -v omp >/dev/null 2>&1; then
+  eval "$(omp completions zsh)"
+fi
 
 # zinit 存在时才加载插件
 if command -v zinit >/dev/null 2>&1; then
@@ -107,3 +123,8 @@ else
   alias ll='ls -lh'
   alias la='ls -lha'
 fi
+
+
+########################################
+# 7. 个人项目
+########################################
